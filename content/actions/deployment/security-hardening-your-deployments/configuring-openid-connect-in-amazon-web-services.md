@@ -90,7 +90,7 @@ To update your workflows for OIDC, you will need to make two changes to your YAM
 The `aws-actions/configure-aws-credentials` action receives a JWT from the {% data variables.product.prodname_dotcom %} OIDC provider, and then requests an access token from AWS. For more information, see the AWS [documentation](https://github.com/aws-actions/configure-aws-credentials).
 
 - `<example-bucket-name>`: Add the name of your S3 bucket here.
-- `<role-to-assume>`: Replace the example with your AWS role.
+- `<role-to-assume>`: Replace the example with your AWS role ARN.
 - `<example-aws-region>`: Add the name of your AWS region here.
 
 ```yaml{:copy}
@@ -104,8 +104,8 @@ env:
   AWS_REGION : "<example-aws-region>"
 # permission can be added at job level or workflow level    
 permissions:
-      id-token: write   # This is required for requesting the JWT
-      contents: read    # This is required for actions/checkout
+  id-token: write   # This is required for requesting the JWT
+  contents: read    # This is required for actions/checkout
 jobs:
   S3PackageUpload:
     runs-on: ubuntu-latest
@@ -115,7 +115,7 @@ jobs:
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          role-to-assume: arn:aws:iam::1234567890:role/example-role
+          role-to-assume: <role-to-assume>   # For example, arn:aws:iam::1234567890:role/example-role
           role-session-name: samplerolesession
           aws-region: {% raw %}${{ env.AWS_REGION }}{% endraw %}
       # Upload a file to AWS s3
